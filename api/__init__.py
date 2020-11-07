@@ -28,8 +28,9 @@ async def handler(websocket, path):
             print("Pinging ", rule.activators)
             for activator in rule.activators:
                 id_to_ping = activator
-                conn = state.get_connection(id_to_ping)
-                await conn.send(json.dumps({'id': id_to_ping, 'msg': 'instruction'}))
+                if state.is_connected(id_to_ping):
+                    conn = state.get_connection(id_to_ping)
+                    await conn.send(json.dumps({'id': id_to_ping, 'msg': 'instruction'}))
 
 
 class SystemState:
@@ -62,6 +63,9 @@ class SystemState:
     def update_connection(self, id, connection):
         if not id in self.connections:
             self.connections[id] = connection
+
+    def is_connected(self, id):
+        return id in self.connections
 
     def get_connection(self, id):
         return self.connections[id]
