@@ -4,7 +4,7 @@
 
 
 #send the measurement to api
-def simulate_actautor_1():
+def simulate_actuator_1():
 
     """Function """
     
