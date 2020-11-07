@@ -2,12 +2,19 @@ import argparse
 import asyncio
 import websockets
 import json
+import logging
 
 from rules import *
+from deviceparser import DeviceParser
+
+logging.basicConfig()
 
 
 async def handler(websocket, path):
+    print("We are in here")
+    print(websocket)
     async for message in websocket:
+        print("Received message!")
         data = json.loads(message)
         id = data['id']
         state.update_connection(id, websocket)
@@ -24,7 +31,7 @@ class SystemState:
     def __init__(self, rules, devices, connections):
         self.rules = rules
         self.devices = devices
-        self.connections = rules
+        self.connections = connections
 
     def update_connection(self, id, connection):
         if not id in self.connections:
@@ -34,10 +41,10 @@ class SystemState:
         return self.connections[id]
 
     def data(self, id):
-        return self.devices[id].data
+        return self.devices[id]['data']
 
     def update_data(self, id, new_data):
-        self.devices[id].data = new_data
+        self.devices[id]['data'] = new_data
 
     def rules_to_apply(self):
         return filter(lambda r: r.statement.evaluate(self), self.rules)
@@ -55,7 +62,9 @@ device_file = args.device_file
 
 rules = parse_rules(rule_file)
 # Write code to read devices here
-devices = {}
+
+parser = DeviceParser(device_file)
+devices = parser.genDevices()
 
 # Validate the rules
 

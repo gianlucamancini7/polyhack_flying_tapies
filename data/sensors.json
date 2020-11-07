@@ -1,0 +1,14 @@
+{
+   "Sensor1": {
+      "id": "69420",
+      "type": "motion"
+   },
+   "Sensor2": {
+      "id": "69421",
+      "type": "noise"
+   },
+   "Sensor3": {
+      "id": "69422",
+      "type": "proximity"
+   }
+}
