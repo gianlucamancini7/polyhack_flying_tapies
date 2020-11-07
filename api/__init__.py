@@ -45,7 +45,7 @@ class SystemState:
         sens_id = self.sensors_ids()
 
         # Check that the actuator id is valid
-        if not all(map(lambda r: r.actuator in act_ids, self.rules)):
+        if not all(map(lambda r: r.activator in act_ids, self.rules)):
             raise ValueError("Some rules specify invalid actuator ids")
 
         if not all(map(lambda r: r.validate_statement(sens_id))):
@@ -87,6 +87,7 @@ devices = parser.genDevices()
 # Dictionary id to ws connection
 
 state = SystemState(rules, devices)
+state.validate()
 
 start_server = websockets.serve(handler, 'localhost', 8765)
 
