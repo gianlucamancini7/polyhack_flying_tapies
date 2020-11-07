@@ -70,8 +70,12 @@ class SystemState:
             raise ValueError("Some rules use invalid sensors ids")
 
     def update_connection(self, id, connection):
+        self.devices[id].last_msg = time.time()
         if not id in self.connections:
             self.connections[id] = connection
+
+    def last_msg(self, id):
+        self.devices[id].last_msg
 
     def is_connected(self, id):
         return id in self.connections

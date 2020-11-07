@@ -3,9 +3,6 @@ import websockets
 import json
 import asyncio
 
-# import configurations
-from configuration import id_1, id_2, id_3, id_4
-
 
 class Sensor:
 
