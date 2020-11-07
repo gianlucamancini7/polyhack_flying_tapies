@@ -11,7 +11,7 @@
       "id": "5aba4c958b7c8c3b0ad84a89e05c0e1df1382d4c09d35277dfad1a320cc21921",
       "type": "proximity"
    },
-   "Sensor4: {
+   "Sensor4": {
       "id": "d2390a59e6e2c3985f2b9f7c079a0e1201fe072c10a85505356e1752b0842b96",
       "type": "noise"
    }
