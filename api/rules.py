@@ -16,6 +16,9 @@ class Rule:
         self.statement = statement
         self.activators = activators
 
+    def to_str(self):
+        return f"If ({self.statement.to_str()}) then ({self.activators})"
+
 
 class Statement():
     def evaluate(self, state):
@@ -60,7 +63,7 @@ class TemporalAtom():
         return self.id in valid_ids
 
     def to_str(self):
-        return f"last {self.id} msg less than {self.elapsed_time}"
+        return f"last {self.id[:5]} msg less than {self.elapsed_time}"
 
 
 class EvaluateAtom(Statement):
@@ -74,7 +77,7 @@ class EvaluateAtom(Statement):
         return self.id in valid_ids
 
     def to_str(self):
-        return f"bool({self.id})"
+        return f"bool({self.id[:5]})"
 
 
 class FuzzyAtom(Statement):
@@ -94,7 +97,7 @@ class FuzzyAtom(Statement):
         return self.id in valid_ids
 
     def to_str(self):
-        return f"{self.id} < {self.threshold} (± {self.delta})"
+        return f"{self.id[:5]} < {self.threshold} (± {self.delta})"
 
 
 class And(Statement):
@@ -172,13 +175,6 @@ if __name__ == '__main__':
             EvaluateAtom(devices[0]['id']),
             [devices[5]['id'], devices[6]['id']]
         ),
-
-        Rule(
-            FuzzyAtom(devices[0]['id'], 30, 1000),
-
-            [devices[5]['id']]
-        ),
-
     ]
 
-    dump_rules(rules, 'data/rules_easy.data')
+    dump_rules(rules, 'data/rules_comp.data')
