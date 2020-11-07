@@ -6,6 +6,7 @@ import logging
 
 from rules import *
 from deviceparser import DeviceParser
+from utils import *
 
 logging.basicConfig()
 
@@ -22,16 +23,34 @@ async def handler(websocket, path):
             state.update_data(id, data['data'])
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
-            id_to_ping = rule.activator.id
-            conn = state.get_connection(id_to_ping)
-            await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
+            for activator in rule.activators:
+                id_to_ping = activator.id
+                conn = state.get_connection(id_to_ping)
+                await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
 
 
 class SystemState:
-    def __init__(self, rules, devices, connections):
+    def __init__(self, rules, devices):
         self.rules = rules
         self.devices = devices
-        self.connections = connections
+        self.connections = {}
+
+    def sensors_ids(self):
+        return filter(lambda id: is_sensor_ty(self.devices[id]['ty']), self.devices.keys())
+
+    def actuators_ids(self):
+        return filter(lambda id: is_actuator_ty(self.devices[id]['ty']), self.devices.keys())
+
+    def validate(self):
+        act_ids = self.actuators_ids()
+        sens_id = self.sensors_ids()
+
+        # Check that the actuator id is valid
+        if not all(map(lambda r: r.activator in act_ids, self.rules)):
+            raise ValueError("Some rules specify invalid actuator ids")
+
+        if not all(map(lambda r: r.validate_statement(sens_id))):
+            raise ValueError("Some rules use invalid sensors ids")
 
     def update_connection(self, id, connection):
         if not id in self.connections:
@@ -66,12 +85,10 @@ rules = parse_rules(rule_file)
 parser = DeviceParser(device_file)
 devices = parser.genDevices()
 
-# Validate the rules
-
 # Dictionary id to ws connection
-connections = {}
 
-state = SystemState(rules, devices, connections)
+state = SystemState(rules, devices)
+state.validate()
 
 start_server = websockets.serve(handler, 'localhost', 8765)
 
