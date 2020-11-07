@@ -11,7 +11,7 @@ def simulate_measurement(measurement_happened, lower_bound=0, upper_bound=1):
         return None
 
 #simulate loop
-def simulate_actuator_1(id_):
+def simulate_actuator_2(id_):
 
     measurement_happened=random.choice([True, False])
     outcome=simulate_measurement(measurement_happened)
