@@ -16,10 +16,6 @@ if __name__ == "__main__":
     parser.add_argument(
         'device_file', help='File where the devices are stored in JSON format')
 
-    # TODO: remove after debug
-    parser.add_argument(
-        'rules', help='File where the devices are stored in JSON format')
-
     args = parser.parse_args()
     device_file = args.device_file
 

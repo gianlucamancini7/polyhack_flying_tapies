@@ -21,14 +21,13 @@ async def handler(websocket, path):
         if 'data' in data:
             new_data = data['data']
             state.update_data(id, new_data)
-            print("Updating data of ", id, " to ", new_data)
 
         print("Evaluating rules")
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
             print("Pinging ", rule.activators)
             for activator in rule.activators:
-                id_to_ping = activator.id
+                id_to_ping = activator
                 conn = state.get_connection(id_to_ping)
                 await conn.send(json.dumps({'id': id_to_ping, 'msg': 'instruction'}))
 
@@ -40,20 +39,24 @@ class SystemState:
         self.connections = {}
 
     def sensors_ids(self):
-        return filter(lambda id: is_sensor_ty(self.devices[id]['ty']), self.devices.keys())
+        return list(filter(lambda id: is_sensor_ty(self.devices[id].ty), self.devices.keys()))
 
     def actuators_ids(self):
-        return filter(lambda id: is_actuator_ty(self.devices[id]['ty']), self.devices.keys())
+        return list(filter(lambda id: is_actuator_ty(self.devices[id].ty), self.devices.keys()))
 
     def validate(self):
         act_ids = self.actuators_ids()
-        sens_id = self.sensors_ids()
+        sens_id = self.sensors_ids() + act_ids
 
         # Check that the actuator id is valid
-        if not all(map(lambda r: r.activator in act_ids, self.rules)):
-            raise ValueError("Some rules specify invalid actuator ids")
+        for r in self.rules:
+            for act in r.activators:
+                if not act in act_ids:
+                    raise ValueError("Some rules specify invalid actuator ids")
 
-        if not all(map(lambda r: r.validate_statement(sens_id), self.rules)):
+        if not all(map(lambda r: r.statement.validate_statement(sens_id), self.rules)):
+            inv_rule = filter(
+                lambda r: not r.statement.validate_statement(sens_id), self.rules)
             raise ValueError("Some rules use invalid sensors ids")
 
     def update_connection(self, id, connection):
@@ -84,7 +87,7 @@ args = parser.parse_args()
 rule_file = args.rule_file
 device_file = args.device_file
 
-rules = []  # parse_rules(rule_file)
+rules = parse_rules(rule_file)
 # Write code to read devices here
 
 parser = DeviceParser(device_file)

@@ -15,6 +15,8 @@ class Actuator:
         uri = "ws://localhost:8765"
 
         async with websockets.connect(uri) as websocket:
+            await websocket.send(json.dumps({'id': self.id}))
+
             consumer_task = asyncio.ensure_future(
                 self.consume(websocket))
             producer_task = asyncio.ensure_future(

@@ -1,8 +1,8 @@
 class Device:
 
-    def __init__(self, id, ty):
-        self.id = id
-        self.type = ty
+    def __init__(self, id_, ty):
+        self.id = id_
+        self.ty = ty
         self.data = None
 
     def setData(self, data):

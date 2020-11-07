@@ -20,6 +20,9 @@ class Statement():
     def evaluate(self, state):
         raise NotImplementedError
 
+    def validate_statement(self, valid_ids):
+        raise NotImplementedError
+
 
 class EvaluateAtom(Statement):
     def __init__(self, id):
@@ -27,6 +30,9 @@ class EvaluateAtom(Statement):
 
     def evaluate(self, state):
         return bool(state.data(self.id))
+
+    def validate_statement(self, valid_ids):
+        return self.id in valid_ids
 
 
 class FuzzyAtom(Statement):
@@ -37,7 +43,13 @@ class FuzzyAtom(Statement):
 
     # Compute whether we are in a certain range of the value with tolerance
     def evaluate(self, state):
-        return abs(state.data(self.id) - self.threshold) < self.delta
+        data = state.data(self.id)
+        if data is None:
+            return False
+        return abs(data - self.threshold) < self.delta
+
+    def validate_statement(self, valid_ids):
+        return self.id in valid_ids
 
 
 class And(Statement):
@@ -48,6 +60,9 @@ class And(Statement):
     def evaluate(self, state):
         return self.left.evaluate(state) and self.right.evaluate(state)
 
+    def validate_statement(self, valid_ids):
+        return self.left.validate_statement(valid_ids) and self.right.validate_statement(valid_ids)
+
 
 class Or(Statement):
     def __init__(self, left, right):
@@ -57,6 +72,9 @@ class Or(Statement):
     def evaluate(self, state):
         return self.left.evaluate(state) or self.right.evaluate(state)
 
+    def validate_statement(self, valid_ids):
+        return self.left.validate_statement(valid_ids) and self.right.validate_statement(valid_ids)
+
 
 class Not(Statement):
     def __init__(self, statement):
@@ -65,12 +83,13 @@ class Not(Statement):
     def evaluate(self, state):
         return not self.statement.evaluate(state)
 
+    def validate_statement(self, valid_ids):
+        return self.statement.validate_statement(valid_ids)
+
 
 if __name__ == '__main__':
 
-    devices = json.load(open('data/sensors.json','rb'))
-
-
+    devices = json.load(open('data/sensors.json', 'rb'))
 
     rules = [
         Rule(
@@ -80,27 +99,32 @@ if __name__ == '__main__':
         ),
 
         Rule(
-            EvaluateAtom(devices[2]['id']),
+            EvaluateAtom(devices[0]['id']),
 
             [devices[5]['id']]
 
         ),
         Rule(
             And(
-                EvaluateAtom(devices[2]['id']),
-                EvaluateAtom(devices[1]) 
+                EvaluateAtom(devices[0]['id']),
+                EvaluateAtom(devices[1]['id'])
             ),
 
-                [devices[5]['id']]
-                
-            ), 
+            [devices[5]['id']]
+
+        ),
 
         Rule(
-            EvaluateAtom(devices[2]['id']),
+            EvaluateAtom(devices[0]['id']),
             [devices[5]['id'], devices[6]['id']]
-        )
+        ),
 
+        Rule(
+            FuzzyAtom(devices[0]['id'], 30, 1000),
+
+            [devices[5]['id']]
+        ),
 
     ]
 
-    dump_rules(rules, 'rules_comp.data')
+    dump_rules(rules, 'data/rules_easy.data')
