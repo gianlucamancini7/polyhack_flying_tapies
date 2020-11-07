@@ -53,3 +53,31 @@ class Not(Statement):
 
     def evaluate(self, state):
         return not self.statement.evaluate(state)
+
+
+if __name__ == '__main__':
+    rules = [
+        Rule(
+            AtomicStatement(
+                '1234',
+                100
+            ),
+            '4567'
+        ),
+
+        Rule(
+            And(
+                AtomicStatement(
+                    '1234',
+                    25
+                ),
+                AtomicStatement(
+                    '738',
+                    28
+                )
+            ),
+            '1234'
+        )
+    ]
+
+    dump_rules(rules, 'rules.data')

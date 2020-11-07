@@ -3,7 +3,21 @@ import asyncio
 import websockets
 import json
 
-from rules import parse_rules
+from rules import *
+
+
+async def handler(websocket, path):
+    async for message in websocket:
+        data = json.loads(message)
+        id = data['id']
+        state.update_connection(id, websocket)
+        if 'data' in data:
+            state.update_data(id, data['data'])
+        rules_firing = state.rules_to_apply()
+        for rule in rules_firing:
+            id_to_ping = rule.activator.id
+            conn = state.get_connection(id_to_ping)
+            await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
 
 
 class SystemState:
@@ -55,17 +69,3 @@ start_server = websockets.serve(handler, 'localhost', 8765)
 evloop = asyncio.get_event_loop()
 evloop.run_until_complete(start_server)
 evloop.run_forever()
-
-
-async def handler(websocket, path):
-    async for message in websocket:
-        data = json.loads(message)
-        id = data['id']
-        state.update_connection(id, websocket)
-        if 'data' in data:
-            state.update_data(id, data['data'])
-        rules_firing = state.rules_to_apply()
-        for rule in rules_firing:
-            id_to_ping = rule.activator.id
-            conn = state.get_connection(id_to_ping)
-            await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
