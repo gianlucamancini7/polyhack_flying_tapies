@@ -29,7 +29,7 @@ async def handler(websocket, path):
                 continue
 
         print(
-            f"\nReceived message from sensor {state.device(id).ty} from id number {id[:6]} ....")
+            f"\nReceived message from sensor {state.device(id).ty} with id number {id[:6]} ....")
 
         state.update_connection(id, websocket)
         if 'data' in data:
@@ -41,7 +41,8 @@ async def handler(websocket, path):
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
 
-            print("Pinging ", rule.activators)
+            print("\n Logical rule activated under the hood for the device with the following id ",
+                  rule.statement.to_str())
 
             for activator in rule.activators:
                 id_to_ping = activator
