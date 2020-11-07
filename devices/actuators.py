@@ -25,7 +25,9 @@ class Actuator:
 
     async def consume(self, ws):
         async for message in ws:
-            print("Received message from api: ", message)
+            ms = json.loads(message)
+            print(
+                f"\n The sensor with id equal to {ms['id'][:6]} ... has received a {ms['msg']}")
 
     async def produce(self, ws):
         while True:

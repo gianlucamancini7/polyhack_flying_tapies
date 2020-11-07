@@ -3,29 +3,35 @@ import asyncio
 import websockets
 import json
 import logging
+import time
 
 from rules import *
 from deviceparser import DeviceParser
 from utils import *
 
-logging.basicConfig()
+logging.basicConfig(level=logging.INFO)
 
 
 async def handler(websocket, path):
-    print(websocket)
+
     async for message in websocket:
         data = json.loads(message)
         id = data['id']
-        print("Received message from ", id)
+        print(
+            f"\nReceived message from sensor {state.device(id).ty} from id number {id[:6]} ....")
+
         state.update_connection(id, websocket)
         if 'data' in data:
             new_data = data['data']
             state.update_data(id, new_data)
 
-        print("Evaluating rules")
+        print("\nEvaluating rules")
+
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
+
             print("Pinging ", rule.activators)
+
             for activator in rule.activators:
                 id_to_ping = activator
                 if state.is_connected(id_to_ping):
@@ -38,6 +44,9 @@ class SystemState:
         self.rules = rules
         self.devices = devices
         self.connections = {}
+
+    def device(self, id):
+        return self.devices[id]
 
     def sensors_ids(self):
         return list(filter(lambda id: is_sensor_ty(self.devices[id].ty), self.devices.keys()))
@@ -103,6 +112,8 @@ state = SystemState(rules, devices)
 state.validate()
 
 start_server = websockets.serve(handler, 'localhost', 8765)
+logging.info("\nWebsocket is initiated")
+logging.info("\nServer is up and running: waiting for new messages")
 
 evloop = asyncio.get_event_loop()
 evloop.run_until_complete(start_server)

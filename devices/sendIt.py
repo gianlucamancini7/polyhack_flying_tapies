@@ -3,14 +3,16 @@ import websockets
 import logging
 import json
 import argparse
+import time
 
 from sensors import Sensor
 from actuators import Actuator
 from deviceparser import DeviceParser
 from utils import *
 
+logging.basicConfig(level=logging.INFO)
+
 if __name__ == "__main__":
-    logging.basicConfig()
 
     parser = argparse.ArgumentParser(description='API for ASUS Challenge')
     parser.add_argument(
@@ -21,6 +23,9 @@ if __name__ == "__main__":
 
     parser = DeviceParser(device_file)
     devices = parser.genDevices()
+
+    logging.info(
+        "\nIOT fleet is deployed in Hackwill: devices are ready to send measurements to the API")
 
     sensors = []
     actuators = []
