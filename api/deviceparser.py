@@ -8,14 +8,14 @@ class SensorParseError(Exception):
 
 class DeviceParser:
     
-    def __init__(self):
+    def __init__(self, path):
         self.devPath = '../devices/sensors.json'
-        self.devDict = json.load(self.devPath)
+        self.devDict = json.load(path)
     
     def genDevices(self):
         for key in self.devDict.keys():
             if self.devDict[key] =='motion':
-                # Create an instance of a motion sensor class, passing all params from the dict
+                passs
             elif self.devDict[key] == 'noise':
                 pass    
             elif self.devDict[key] == 'proximity':
