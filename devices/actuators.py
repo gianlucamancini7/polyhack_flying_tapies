@@ -4,9 +4,6 @@ import asyncio
 import random
 import json
 
-#import configurations
-from configuration import id_5, id_6, id_7
-
 
 class Actuator:
 

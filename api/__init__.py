@@ -60,10 +60,10 @@ class SystemState:
         return self.connections[id]
 
     def data(self, id):
-        return self.devices[id]['data']
+        return self.devices[id].getData()
 
     def update_data(self, id, new_data):
-        self.devices[id]['data'] = new_data
+        self.devices[id].setData(new_data)
 
     def rules_to_apply(self):
         return filter(lambda r: r.statement.evaluate(self), self.rules)
@@ -71,9 +71,10 @@ class SystemState:
 
 parser = argparse.ArgumentParser(description='API for ASUS Challenge')
 parser.add_argument(
-    'rule_file', help='File where the rules are stored in pickle format')
-parser.add_argument(
     'device_file', help='File where the devices are stored in JSON format')
+parser.add_argument(
+    'rule_file', help='File where the rules are stored in pickle format')
+
 
 args = parser.parse_args()
 rule_file = args.rule_file
