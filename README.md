@@ -10,7 +10,7 @@ The centralized system has the following characteristics:
 - IOT devices' states are saved in system state which is saved in memory.
 - Rules are dynamically loaded from a file containing serielized pickle instruction data. Rules support intertemporal relations
 - All actions are performed completely asyncrhonously.
-- Dynamic service registration is allowed: this means that new IOT devices can register asynchrnously and be part of the fleet
+- Dynamic service registration is allowed: this means that new IOT devices can register via websocket and be part of the fleet
 
 ## Use the MVP
 First clone the repository, create a virtual environment and get the requirements 
