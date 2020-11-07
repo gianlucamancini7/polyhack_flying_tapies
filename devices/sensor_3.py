@@ -18,7 +18,7 @@ def simulate_measurement(measurement_happened, lower_dist_beacon_receiver=0, upp
 
 
 #send the measurement to api
-def simulate_sensor_2(id_):
+def simulate_sensor_3(id_):
 
     measurement_happened=random.choice([True, False])
     outcome=simulate_measurement(measurement_happened)

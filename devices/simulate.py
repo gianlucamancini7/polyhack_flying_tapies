@@ -55,7 +55,7 @@ async def simulation(websocket, IntervalCommunicationRange=[0, 5]):
             IntervalCommunication=random.uniform(IntervalCommunicationRange)
 
             response= {
-                "id":id_
+                "id":id_,
                 "measurement": measurements[id_]
             }
 
