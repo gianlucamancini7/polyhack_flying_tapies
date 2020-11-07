@@ -18,9 +18,6 @@ async def handler(websocket, path):
     async for message in websocket:
         data = json.loads(message)
         id = data['id']
-        print(
-            f"\nReceived message from sensor {state.device(id).ty} from id number {id[:6]} ....")
-
         # Dynamic service registration
         if not state.is_registered(id):
             if 'registration' in data:
@@ -30,6 +27,9 @@ async def handler(websocket, path):
             else:
                 print("Message sent before registering, skipping")
                 continue
+
+        print(
+            f"\nReceived message from sensor {state.device(id).ty} from id number {id[:6]} ....")
 
         state.update_connection(id, websocket)
         if 'data' in data:
