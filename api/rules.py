@@ -25,6 +25,15 @@ class Statement():
         raise NotImplementedError
 
 
+class RandomAtom():
+    def __init__(self, prob=0.5):
+        self.prob = 0.5
+
+    def evaluate(self):
+        import random
+        return random.random() < self.prob
+
+
 class TemporalAtom():
     def __init__(self, id, elapsed_time):
         self.id = id
