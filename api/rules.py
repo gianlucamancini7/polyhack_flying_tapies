@@ -9,6 +9,12 @@ def dump_rules(rule, filename):
     pickle.dump(rule, open(filename, 'wb'))
 
 
+class Rule:
+    def __init__(self, statement, activator):
+        self.statement = statement
+        self.activator = activator
+
+
 class Statement():
     def evaluate(self, state):
         raise NotImplementedError

@@ -1,14 +1,22 @@
+#simulate smart lamp
 
+import random
 
+#generate some measurements
+def simulate_measurement(measurement_happened, lower_bound=0, upper_bound=1):
 
+    if measurement_happened:
+        return random.uniform([lower_bound, upper_bound])
+    else:
+        return None
 
-#send the measurement to api
-def simulate_actautor_2():
+#simulate loop
+def simulate_actuator_1(id_):
 
-    """Function """
-    
-    return
+    measurement_happened=random.choice([True, False])
+    outcome=simulate_measurement(measurement_happened)
 
+    return outcome, id_
 
 
 if __name__ == "__main__":
