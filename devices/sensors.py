@@ -19,13 +19,17 @@ class Sensor:
         async with websockets.connect(uri) as websocket:
 
             while True:
+                await asyncio.sleep(5)
+                mes = self.measure()
+                if mes is None:
+                    continue
+
                 data = {
                     "id": self.id,
-                    "data": self.measure()
+                    "data": mes
                 }
 
                 await websocket.send(json.dumps(data))
-                await asyncio.sleep(5)
 
     def measure(self):
 
