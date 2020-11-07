@@ -32,7 +32,7 @@ In order to generate a new pickle files containing new rules, first a new rule a
 Then, run the following and a new data file will be created in ```data``` folder.
 
 ```
-python rules.py
+python api/rules.py
 ```
 
 Finally, to start up a simulation of the IOT devices run in a new terminal window.
