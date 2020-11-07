@@ -14,19 +14,13 @@ def simulate_measurement(measurement_happened, no_suspicious_noise=False, suspic
     else:
         return None
 
-
-
 #send the measurement to api
-def simulate_sensor_2():
+def simulate_sensor_2(id_):
 
     measurement_happened=random.choice([True, False])
     outcome=simulate_measurement(measurement_happened)
 
     return id_, outcome
-
-    
-    return
-
 
 
 if __name__ == "__main__":

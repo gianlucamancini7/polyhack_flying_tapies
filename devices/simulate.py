@@ -10,12 +10,13 @@ from sensor_1 import simulate_sensor_1
 from sensor_2 import simulate_sensor_2
 from sensor_3 import simulate_sensor_3
 
+#import configurations
 from configuration import id_1,id_2,id_3,id_4,id_5
 
 import time
 #simulate sensor and actuators sending information
 
-def simulation(IntervalCommunicationRange=[0, 5]):
+async def simulation(websocket, IntervalCommunicationRange=[0, 5]):
 
 
     while True:
@@ -58,4 +59,4 @@ def simulation(IntervalCommunicationRange=[0, 5]):
                 "measurement": measurements[id_]
             }
 
-            sendIt(response)
+            await websocket.send(response)
