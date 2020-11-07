@@ -4,6 +4,7 @@ class Device:
         self.id = id_
         self.ty = ty
         self.data = None
+        self.last_msg = None
 
     def setData(self, data):
         self.data = data

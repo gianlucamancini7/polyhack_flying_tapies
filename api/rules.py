@@ -1,5 +1,6 @@
 import pickle
 import json
+import time
 
 
 def parse_rules(filename):
@@ -22,6 +23,23 @@ class Statement():
 
     def validate_statement(self, valid_ids):
         raise NotImplementedError
+
+
+class TemporalAtom():
+    def __init__(self, id, elapsed_time):
+        self.id = id
+        self.elapsed_time = elapsed_time
+
+    def evaluate(self, state):
+        start = state.last_msg(self.id)
+        if start is None:
+            return False
+
+        end = time.time()
+        return (end - start) < self.elapsed_time
+
+    def validate_statement(self, valid_ids):
+        return self.id in valid_ids
 
 
 class EvaluateAtom(Statement):
