@@ -37,11 +37,9 @@ if __name__ == "__main__":
         else:
             raise ValueError("Not a sensors or acutator")
 
-    evloop = asyncio.get_event_loop()
-    for sensor in sensors:
-        evloop.run_in_executor(sensor.start_listen())
-
-    for act in actuators:
-        evloop.run_in_executor(act.start_listen())
-
-    evloop.run_forever()
+    sensors_tasks = [s.start_listen() for s in sensors]
+    actuators_tasks = [a.start_listen() for a in actuators]
+    tasks = sensors_tasks + actuators_tasks
+    loop = asyncio.get_event_loop()
+    cors = asyncio.wait(tasks)
+    loop.run_until_complete(cors)

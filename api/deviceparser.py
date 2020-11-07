@@ -1,5 +1,5 @@
 import json
-import devices
+from devices import Device
 
 
 class DeviceParser:

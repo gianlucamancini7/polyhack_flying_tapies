@@ -49,7 +49,7 @@ class SystemState:
         if not all(map(lambda r: r.activator in act_ids, self.rules)):
             raise ValueError("Some rules specify invalid actuator ids")
 
-        if not all(map(lambda r: r.validate_statement(sens_id))):
+        if not all(map(lambda r: r.validate_statement(sens_id), self.rules)):
             raise ValueError("Some rules use invalid sensors ids")
 
     def update_connection(self, id, connection):
@@ -80,7 +80,7 @@ args = parser.parse_args()
 rule_file = args.rule_file
 device_file = args.device_file
 
-rules = parse_rules(rule_file)
+rules = []  # parse_rules(rule_file)
 # Write code to read devices here
 
 parser = DeviceParser(device_file)
