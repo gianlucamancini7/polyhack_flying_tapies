@@ -37,8 +37,8 @@ class Actuator:
                 return random.uniform(0, 1)
 
             elif self.id == id_7:
-                #
-                return random
+                # smart lamp: continous value [0,1]
+                return random.uniform(0, 1)
 
         else:
             return None
