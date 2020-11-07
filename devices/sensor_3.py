@@ -17,17 +17,12 @@ def simulate_measurement(measurement_happened, dist_beacon_receiver):
 
 
 #send the measurement to api
-def simulate_sensor_2():
+def simulate_sensor_3(id_):
 
     measurement_happened=random.choice([True, False])
     outcome=simulate_measurement(measurement_happened)
 
-    return id, outcome
-
-    
-    return
-
-
+    return id_, outcome
 
 if __name__ == "__main__":
     pass
