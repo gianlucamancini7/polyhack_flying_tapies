@@ -7,6 +7,7 @@ import time
 
 from rules import *
 from deviceparser import DeviceParser
+from devices import Device
 from utils import *
 
 logging.basicConfig(level=logging.INFO)
@@ -19,6 +20,16 @@ async def handler(websocket, path):
         id = data['id']
         print(
             f"\nReceived message from sensor {state.device(id).ty} from id number {id[:6]} ....")
+
+        # Dynamic service registration
+        if not state.is_registered(id):
+            if 'registration' in data:
+                ty = data['registration']
+                device = Device(id, ty)
+                state.register(id, device)
+            else:
+                print("Message sent before registering, skipping")
+                continue
 
         state.update_connection(id, websocket)
         if 'data' in data:
@@ -47,6 +58,9 @@ class SystemState:
 
     def device(self, id):
         return self.devices[id]
+
+    def register(self, id, device):
+        self.devices[id] = device
 
     def sensors_ids(self):
         return list(filter(lambda id: is_sensor_ty(self.devices[id].ty), self.devices.keys()))
@@ -79,6 +93,9 @@ class SystemState:
 
     def is_connected(self, id):
         return id in self.connections
+
+    def is_registered(self, id):
+        return id in self.devices
 
     def get_connection(self, id):
         return self.connections[id]
