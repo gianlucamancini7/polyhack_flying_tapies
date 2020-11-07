@@ -1,0 +1,18 @@
+// Device id
+// Sensor type 
+// Sensor-specific paras
+// Sensor location
+
+{"Sensor1":
+    {"id": "69420",
+    "type": "motion",
+    "property2": "something"},
+ "Sensor2":
+    {"id": "69421",
+   "type": "noise",
+    "property2": "something"},
+ "Sensor3":
+    {"id": "69422",
+      "type": "proximity",
+    "property2": "something"},
+}
