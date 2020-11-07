@@ -19,10 +19,10 @@ class SystemState:
     def get_connection(self, id):
         return self.connections[id]
 
-    def update_data(self, id, new_data):
-        if not id in self.devices:
-            raise ValueError
+    def data(self, id):
+        return self.devices[id].data
 
+    def update_data(self, id, new_data):
         self.devices[id].data = new_data
 
     def rules_to_apply(self):
