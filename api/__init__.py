@@ -12,17 +12,21 @@ logging.basicConfig()
 
 
 async def handler(websocket, path):
-    print("We are in here")
     print(websocket)
     async for message in websocket:
-        print("Received message!")
         data = json.loads(message)
         id = data['id']
+        print("Received message from ", id)
         state.update_connection(id, websocket)
         if 'data' in data:
-            state.update_data(id, data['data'])
+            new_data = data['data']
+            state.update_data(id, new_data)
+            print("Updating data of ", id, " to ", new_data)
+
+        print("Evaluating rules")
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
+            print("Pinging ", rule.activators)
             for activator in rule.activators:
                 id_to_ping = activator.id
                 conn = state.get_connection(id_to_ping)
@@ -49,7 +53,7 @@ class SystemState:
         if not all(map(lambda r: r.activator in act_ids, self.rules)):
             raise ValueError("Some rules specify invalid actuator ids")
 
-        if not all(map(lambda r: r.validate_statement(sens_id))):
+        if not all(map(lambda r: r.validate_statement(sens_id), self.rules)):
             raise ValueError("Some rules use invalid sensors ids")
 
     def update_connection(self, id, connection):
@@ -60,10 +64,10 @@ class SystemState:
         return self.connections[id]
 
     def data(self, id):
-        return self.devices[id]['data']
+        return self.devices[id].getData()
 
     def update_data(self, id, new_data):
-        self.devices[id]['data'] = new_data
+        self.devices[id].setData(new_data)
 
     def rules_to_apply(self):
         return filter(lambda r: r.statement.evaluate(self), self.rules)
@@ -71,15 +75,16 @@ class SystemState:
 
 parser = argparse.ArgumentParser(description='API for ASUS Challenge')
 parser.add_argument(
-    'rule_file', help='File where the rules are stored in pickle format')
-parser.add_argument(
     'device_file', help='File where the devices are stored in JSON format')
+parser.add_argument(
+    'rule_file', help='File where the rules are stored in pickle format')
+
 
 args = parser.parse_args()
 rule_file = args.rule_file
 device_file = args.device_file
 
-rules = parse_rules(rule_file)
+rules = []  # parse_rules(rule_file)
 # Write code to read devices here
 
 parser = DeviceParser(device_file)

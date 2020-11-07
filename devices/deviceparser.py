@@ -1,5 +1,4 @@
 import json
-from devices import Device
 
 
 class DeviceParser:
@@ -10,5 +9,5 @@ class DeviceParser:
     def genDevices(self):
         res = {}
         for device in self.devices:
-            res[device['id']] = Device(device['id'], device['type'])
+            res[device['id']] = device['type']
         return res

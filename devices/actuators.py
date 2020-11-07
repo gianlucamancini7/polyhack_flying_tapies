@@ -4,9 +4,6 @@ import asyncio
 import random
 import json
 
-#import configurations
-from configuration import id_5, id_6, id_7
-
 
 class Actuator:
 
@@ -18,10 +15,23 @@ class Actuator:
         uri = "ws://localhost:8765"
 
         async with websockets.connect(uri) as websocket:
-            while True:
-                data = self.measure()
-                await websocket.send(json.dumps(data))
-                await asyncio.sleep(5)
+            consumer_task = asyncio.ensure_future(
+                self.consume(websocket))
+            producer_task = asyncio.ensure_future(
+                self.produce(websocket))
+            await asyncio.wait([consumer_task, producer_task])
+
+    async def consume(self, ws):
+        async for message in ws:
+            print("Received message from api: ", message)
+
+    async def produce(self, ws):
+        while True:
+            await asyncio.sleep(5)
+            data = self.measure()
+            if data is None:
+                continue
+            await ws.send(json.dumps({'id': self.id, 'data': data}))
 
     def measure(self):
 
