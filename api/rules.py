@@ -10,9 +10,9 @@ def dump_rules(rule, filename):
 
 
 class Rule:
-    def __init__(self, statement, activator):
+    def __init__(self, statement, activators):
         self.statement = statement
-        self.activator = activator
+        self.activators = activators
 
 
 class Statement():
@@ -20,13 +20,23 @@ class Statement():
         raise NotImplementedError
 
 
-class AtomicStatement(Statement):
+class EvaluateAtoma(Statement):
     def __init__(self, id, threshold):
         self.id = id
-        self.threshold = threshold
 
     def evaluate(self, state):
-        return state.data(self.id) < self.threshold
+        return bool(state.data(self.id))
+
+
+class FuzzyAtom(Statement):
+    def __init__(self, id, threshold, delta):
+        self.id = id
+        self.threshold = threshold
+        self.delta = delta
+
+    # Compute whether we are in a certain range of the value with tolerance
+    def evaluate(self, state):
+        return abs(state.data(self.id) - self.threshold) < self.delta
 
 
 class And(Statement):
@@ -57,27 +67,6 @@ class Not(Statement):
 
 if __name__ == '__main__':
     rules = [
-        Rule(
-            AtomicStatement(
-                '1234',
-                100
-            ),
-            '4567'
-        ),
-
-        Rule(
-            And(
-                AtomicStatement(
-                    '1234',
-                    25
-                ),
-                AtomicStatement(
-                    '738',
-                    28
-                )
-            ),
-            '1234'
-        )
     ]
 
     dump_rules(rules, 'rules.data')
