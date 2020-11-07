@@ -24,14 +24,23 @@ class Statement():
     def validate_statement(self, valid_ids):
         raise NotImplementedError
 
+    def to_str(self):
+        raise NotImplementedError
+
 
 class RandomAtom():
     def __init__(self, prob=0.5):
-        self.prob = 0.5
+        self.prob = prob
 
     def evaluate(self):
         import random
         return random.random() < self.prob
+
+    def validate_statement(self, valid_ids):
+        return 0 <= self.prob <= 1
+
+    def to_str(self):
+        return f"random({self.prob})"
 
 
 class TemporalAtom():
@@ -50,6 +59,9 @@ class TemporalAtom():
     def validate_statement(self, valid_ids):
         return self.id in valid_ids
 
+    def to_str(self):
+        return f"last {self.id} msg less than {self.elapsed_time}"
+
 
 class EvaluateAtom(Statement):
     def __init__(self, id):
@@ -60,6 +72,9 @@ class EvaluateAtom(Statement):
 
     def validate_statement(self, valid_ids):
         return self.id in valid_ids
+
+    def to_str(self):
+        return f"bool({self.id})"
 
 
 class FuzzyAtom(Statement):
@@ -78,6 +93,9 @@ class FuzzyAtom(Statement):
     def validate_statement(self, valid_ids):
         return self.id in valid_ids
 
+    def to_str(self):
+        return f"{self.id} < {self.threshold} (± {self.delta})"
+
 
 class And(Statement):
     def __init__(self, left, right):
@@ -89,6 +107,9 @@ class And(Statement):
 
     def validate_statement(self, valid_ids):
         return self.left.validate_statement(valid_ids) and self.right.validate_statement(valid_ids)
+
+    def to_str(self):
+        return f"({self.left.to_str()}) AND ({self.right.to_str()})"
 
 
 class Or(Statement):
@@ -102,6 +123,9 @@ class Or(Statement):
     def validate_statement(self, valid_ids):
         return self.left.validate_statement(valid_ids) and self.right.validate_statement(valid_ids)
 
+    def to_str(self):
+        return f"({self.left.to_str()}) OR ({self.right.to_str()})"
+
 
 class Not(Statement):
     def __init__(self, statement):
@@ -112,6 +136,9 @@ class Not(Statement):
 
     def validate_statement(self, valid_ids):
         return self.statement.validate_statement(valid_ids)
+
+    def to_str(self):
+        return f"NOT({self.statement.to_str()})"
 
 
 if __name__ == '__main__':
