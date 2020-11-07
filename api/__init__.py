@@ -23,9 +23,10 @@ async def handler(websocket, path):
             state.update_data(id, data['data'])
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
-            id_to_ping = rule.activator.id
-            conn = state.get_connection(id_to_ping)
-            await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
+            for activator in rule.activators:
+                id_to_ping = activator.id
+                conn = state.get_connection(id_to_ping)
+                await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
 
 
 class SystemState:

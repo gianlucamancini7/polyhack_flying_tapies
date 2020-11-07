@@ -2,21 +2,32 @@ import asyncio
 import websockets
 import logging
 import json
+import argparse
 
-from simulate import simulation
+from sensors import Sensor
+from actuators import Actuator
 
-
-logging.basicConfig()
-
-
-async def executeMessage():
-    uri = "ws://localhost:8765"
-    async with websockets.connect(uri) as websocket:
-        # await websocket.send("Hello world!")
-        # await simulation(websocket)
-        while True:
-            await websocket.send(json.dumps({'id': '69420', 'data': 1234}))
-            await asyncio.sleep(5)
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(executeMessage())
+
+    parser = argparse.ArgumentParser(description='API for ASUS Challenge')
+    parser.add_argument(
+        'device_file', help='File where the devices are stored in JSON format')
+
+    args = parser.parse_args()
+    device_file = args.device_file
+
+    # Parse here
+
+    logging.basicConfig()
+
+    sensors = []
+    actuators = []
+    evloop = asyncio.get_event_loop()
+    for sensor in sensors:
+        evloop.run_in_executor(sensor.start_listen())
+
+    for act in actuators:
+        evloop.run_in_executor(act.start_listen())
+
+    evloop.run_forever()
