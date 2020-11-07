@@ -19,7 +19,7 @@ def simulate_sensor_1(id_):
     measurement_happened=random.choice([True, False])
     outcome=simulate_measurement(measurement_happened)
 
-    return id_, outcome
+    return outcome, id_
 
 
 if __name__ == "__main__":
