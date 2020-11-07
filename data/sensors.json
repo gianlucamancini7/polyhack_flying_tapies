@@ -1,33 +1,30 @@
-{
-   "Sensor1": {
+[
+   {
       "id": "3ec295272dca2023d770070c450509684cada3f37242eee17715c58bd31dfbda",
       "type": "motion"
    },
-   "Sensor2": {
+   {
       "id": "5d90b2a8cb57719651733e7cdbb7cca192adcbd9bdac936b487c0dfd36824b8f",
       "type": "noise"
    },
-   "Sensor3": {
+   {
       "id": "5aba4c958b7c8c3b0ad84a89e05c0e1df1382d4c09d35277dfad1a320cc21921",
       "type": "proximity"
    },
-   "Sensor4": {
+   {
       "id": "d2390a59e6e2c3985f2b9f7c079a0e1201fe072c10a85505356e1752b0842b96",
       "type": "noise"
    },
-   "Actuator1": {
+   {
       "id": "b27a0e2d2cf4c61ceb125ab9880458b730f927573a220eb80416aad39c43a4f6",
-      "type": "doorlock" 
+      "type": "doorlock"
    },
-   "Actuator2":{
+   {
       "id": "e11f4a4bb1e5c0483e912ac0389223b5e36fa5467acdef172f4062ffd764d6e3",
       "type": "lamp"
    },
-   "Actuator3":{
+   {
       "id": "404423ae5382ebffbb132bf1d593c47c7ca13cbafc6683dfd773121ca7a71278",
       "type": "lamp"
    }
-
-   
-}
-
+]
