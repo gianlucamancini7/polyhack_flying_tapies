@@ -12,17 +12,21 @@ logging.basicConfig()
 
 
 async def handler(websocket, path):
-    print("We are in here")
     print(websocket)
     async for message in websocket:
-        print("Received message!")
         data = json.loads(message)
         id = data['id']
+        print("Received message from ", id)
         state.update_connection(id, websocket)
         if 'data' in data:
-            state.update_data(id, data['data'])
+            new_data = data['data']
+            state.update_data(id, new_data)
+            print("Updating data of ", id, " to ", new_data)
+
+        print("Evaluating rules")
         rules_firing = state.rules_to_apply()
         for rule in rules_firing:
+            print("Pinging ", rule.activators)
             for activator in rule.activators:
                 id_to_ping = activator.id
                 conn = state.get_connection(id_to_ping)
