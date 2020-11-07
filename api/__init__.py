@@ -68,4 +68,4 @@ async def handler(websocket, path):
         for rule in rules_firing:
             id_to_ping = rule.activator.id
             conn = state.get_connection(id_to_ping)
-            # TODO: Send message
+            await conn.send(json.dumps({'id': id_to_ping, 'msg': 'something'}))
