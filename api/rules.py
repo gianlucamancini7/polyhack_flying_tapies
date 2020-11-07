@@ -1,4 +1,5 @@
 import pickle
+import json
 
 
 def parse_rules(filename):
@@ -20,8 +21,8 @@ class Statement():
         raise NotImplementedError
 
 
-class EvaluateAtoma(Statement):
-    def __init__(self, id, threshold):
+class EvaluateAtom(Statement):
+    def __init__(self, id):
         self.id = id
 
     def evaluate(self, state):
@@ -66,7 +67,40 @@ class Not(Statement):
 
 
 if __name__ == '__main__':
+
+    devices = json.load(open('data/sensors.json','rb'))
+
+
+
     rules = [
+        Rule(
+            FuzzyAtom(devices[2]['id'], 0.5, 0.05),
+
+            [devices[5]['id']]
+        ),
+
+        Rule(
+            EvaluateAtom(devices[2]['id']),
+
+            [devices[5]['id']]
+
+        ),
+        Rule(
+            And(
+                EvaluateAtom(devices[2]['id']),
+                EvaluateAtom(devices[1]) 
+            ),
+
+                [devices[5]['id']]
+                
+            ), 
+
+        Rule(
+            EvaluateAtom(devices[2]['id']),
+            [devices[5]['id'], devices[6]['id']]
+        )
+
+
     ]
 
-    dump_rules(rules, 'rules.data')
+    dump_rules(rules, 'rules_comp.data')
