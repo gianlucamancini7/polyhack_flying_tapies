@@ -42,7 +42,7 @@ python devices/sendIt.py data/sensors.json
 #### API Features
 In this section, further insights into the main features of the codebase are reported below.
 
-1. Sensor Configuration: Each sensor configuration data is stored in ```data/sensors.json``` file. Each device has a serialized ID and a device type. The list of devices are dynamically loaded when they connect to the server the first time. One extension of the project is giving to all devices, which are not loaded initially, the ability to be loaded subsequently as it can be seen in the ```__init__.py file:
+1. Sensor Configuration: Each sensor configuration data is stored in ```data/sensors.json``` file. Each device has a serialized ID and a device type. The list of devices are dynamically loaded when the server startups. One extension of the project is giving to all devices, which are not loaded initially, the ability to be loaded subsequently as it can be seen in the ```__init__.py file:
 ```
 if not state.is_registered(id):
             if 'registration' in data:
