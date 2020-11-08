@@ -1,7 +1,7 @@
 # ASUS Robotics & AI Center Challenge - IoT Software Foundation for a Smart City: polyhack_flying_tapies
 
 ## Description
-This repository was crafted by Polycraft with love.
+This repository was crafted by Polycraft with love. Check out our video presentation [here](https://youtu.be/r2L68zdHJkc)!
 
 The repository showcases the MVP built for the city of Hackwill's centralized API system managing all city's IOT devices control. The centralized system provides the fundation for a Smart City centralized API system which, if needed, can be scaled up effectively using this repository as a baseline. The centralized system has the following characteristics:
 
