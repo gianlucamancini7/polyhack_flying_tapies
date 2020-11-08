@@ -35,7 +35,7 @@ class RandomAtom():
     def __init__(self, prob=0.5):
         self.prob = prob
 
-    def evaluate(self):
+    def evaluate(self, state):
         import random
         return random.random() < self.prob
 
