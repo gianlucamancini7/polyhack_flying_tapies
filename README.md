@@ -44,17 +44,8 @@ The simulation will show when the connection between the devices and the server 
 #### API Features
 In this section, further insights into the main features of the codebase are reported below.
 
-1. Sensor Configuration: Each sensor configuration data is stored in ```data/sensors.json``` file. Each device has a serialized ID and a device type. The list of devices are dynamically loaded when the server startups. One extension of the project is giving to all devices, which are not loaded initially, the ability to be loaded subsequently as it can be seen in the ```__init__.py file:
-```
-if not state.is_registered(id):
-            if 'registration' in data:
-                ty = data['registration']
-                device = Device(id, ty)
-                state.register(id, device)
-            else:
-                print("Message sent before registering, skipping")
-                continue
-```
+1. Sensor Configuration: Each sensor configuration data is stored in ```data/sensors.json``` file. Each device has a serialized ID and a device type. The list of devices are dynamically loaded when the server startups. One extension of the project is giving to all devices, which are not loaded initially, the ability to be loaded subsequently as it can be seen in the ```__init__.py``` file.
+
 2. Dynamic Rule Loading: Rules can be generated using the ```api/rules.py``` utility, which then serializes them to disk, where they
 can be stored and then dynamically loaded by the API. Internally, the rules are stored as an AST for a boolean-like logic, which affords great flexibility for rule creation. In this way a system designer can add rules to the system dynamically, without having to deal with the source code directly.
 
