@@ -53,8 +53,9 @@ if not state.is_registered(id):
                 print("Message sent before registering, skipping")
                 continue
 ```
-2. Dynamic Rule Loading: Rules can be loaded from disk from a file generated from ```rules.py``` which is then internally saved on disk as an abstract syntax tree.
+2. Dynamic Rule Loading: Rules can be generated using the ```api/rules.py``` utility, which then serializes them to disk, where they
+can be stored and then dynamically loaded by the API. Internally, the rules are stored as an AST for a boolean-like logic, which affords great flexibility for rule creation. In this way a system designer can add rules to the system dynamically, without having to deal with the source code directly.
 
-3. Asyncrhonous System:  
+3. Asynchronous System: Since the communication model is completely based on WebSockets, the resulting codebase uses asynchronous practices to be able to achieve the best possible scalability.
 
-4. Dynamic Simulation: random fires
+4. Dynamic Simulation: We have provided also the tools for creating a simulation of the whole network, which also dynamically loads from the ```data/sensors.json``` file. In this way, testing with more or less system is a breeze. Furthermore, each of the simulation services tries to mimic the real world network as much as possible, for example by each maintaining an individual websocket connection rather than sharing one. This combines the convenience of being able to run the network with a single command with showing the flexibility of the system. 
