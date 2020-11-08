@@ -38,3 +38,23 @@ Finally, to start up a simulation of the IOT devices run in a new terminal windo
 ```
 python devices/sendIt.py data/sensors.json     
 ```
+
+#### API Features
+In this section, further insights into the main features of the codebase are reported below.
+
+1. Sensor Configuration: Each sensor configuration data is stored in ```data/sensors.json``` file. Each device has a serialized ID and a device type. The list of devices are dynamically loaded when they connect to the server the first time. One extension of the project is giving to all devices, which are not loaded initially, the ability to be loaded subsequently as it can be seen in the ```__init__.py file:
+```
+if not state.is_registered(id):
+            if 'registration' in data:
+                ty = data['registration']
+                device = Device(id, ty)
+                state.register(id, device)
+            else:
+                print("Message sent before registering, skipping")
+                continue
+```
+2. Dynamic Rule Loading: Rules can be loaded from disk from a file generated from ```rules.py``` which is then internally saved on disk as an abstract syntax tree.
+
+3. Asyncrhonous System:  
+
+4. Dynamic Simulation: random fires
