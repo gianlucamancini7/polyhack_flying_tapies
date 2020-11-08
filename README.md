@@ -3,8 +3,7 @@
 ## Description
 This repository was crafted by Polycraft with love.
 
-The repository showcases the MVP built for the city of Hackwill's centralized API system managing all city's IOT devices control.
-The centralized system has the following characteristics:
+The repository showcases the MVP built for the city of Hackwill's centralized API system managing all city's IOT devices control. The centralized system provides the fundation for a Smart City centralized API system which, if needed, can be scaled up effectively using this repository as a baseline. The centralized system has the following characteristics:
 
 - IOT devices communicate with the centralized server through websockets.
 - IOT devices' states are saved in system state which is saved in memory.
